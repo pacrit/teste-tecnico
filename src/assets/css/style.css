@@ -78,8 +78,57 @@ body.dark-mode .form-select {
 
 .task-title {
     font-weight: 600;
-    color: var(--dark-color);
+    color: #6c757d;
     margin-bottom: 0.5rem;
+}
+
+/* Adicionar correção para o modo escuro */
+body.dark-mode .task-title {
+    color: #f8f9fa;
+}
+
+/* Também corrigir a descrição da tarefa para melhor contraste */
+body.dark-mode .task-description {
+    color: #adb5bd;
+}
+
+/* Corrigir os metadados da tarefa */
+body.dark-mode .task-meta {
+    color: #6c757d;
+    border-top-color: #495057;
+}
+
+/* Melhorar o contraste dos botões no modo escuro */
+body.dark-mode .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+body.dark-mode .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+body.dark-mode .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Melhorar o contraste das bordas dos cards */
+body.dark-mode .task-card {
+    background-color: #23272b;
+    color: #f8f9fa;
+    border: 1px solid #495057;
+}
+
+/* Melhorar o hover dos cards no modo escuro */
+body.dark-mode .task-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .task-description {

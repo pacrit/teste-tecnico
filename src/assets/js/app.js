@@ -17,6 +17,13 @@ class App {
     }
 
     setupEventListeners() {
+        // Evento do botão Nova Tarefa
+        document.getElementById('newTaskBtn')?.addEventListener('click', () => {
+            this.taskManager.clearForm();
+            const modal = new bootstrap.Modal(document.getElementById('taskModal'));
+            modal.show();
+        });
+
         // Eventos do formulário
         document.getElementById('saveTaskBtn').addEventListener('click', () => {
             this.taskManager.saveTask();
@@ -47,7 +54,14 @@ class App {
         if (darkModeBtn) {
             darkModeBtn.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
+                // Salvar preferência no localStorage
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
             });
+        }
+
+        // Restaurar tema escuro se estava ativo
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
         }
     }
 
@@ -55,11 +69,11 @@ class App {
         const titleInput = document.getElementById('taskTitle');
         const descriptionInput = document.getElementById('taskDescription');
 
-        titleInput.addEventListener('input', () => {
+        titleInput?.addEventListener('input', () => {
             this.validateTitle(titleInput);
         });
 
-        descriptionInput.addEventListener('input', () => {
+        descriptionInput?.addEventListener('input', () => {
             this.validateDescription(descriptionInput);
         });
     }
@@ -70,10 +84,12 @@ class App {
 
         if (value.length < 3) {
             input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
             feedback.textContent = 'O título deve ter pelo menos 3 caracteres';
             return false;
         } else if (value.length > 255) {
             input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
             feedback.textContent = 'O título deve ter no máximo 255 caracteres';
             return false;
         } else {
@@ -89,6 +105,7 @@ class App {
 
         if (value.length > 1000) {
             input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
             feedback.textContent = 'A descrição deve ter no máximo 1000 caracteres';
             return false;
         } else {

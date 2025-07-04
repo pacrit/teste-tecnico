@@ -32,6 +32,13 @@ Uma aplicação web completa para gerenciamento de tarefas, desenvolvida com PHP
 - **Docker** - Containerização
 - **Docker Compose** - Orquestração de serviços
 
+## API
+
+GET /api/tasks - Listar tarefas
+POST /api/tasks - Criar tarefa
+PUT /api/tasks/{id} - Atualizar tarefa
+DELETE /api/tasks/{id} - Excluir tarefa
+
 ## 📋 Pré-requisitos
 
 - Docker
@@ -43,7 +50,7 @@ Uma aplicação web completa para gerenciamento de tarefas, desenvolvida com PHP
 ### 1. Clone o repositório
 ```bash
 git clone <url-do-repositório>
-cd gerenciador-tarefas
+cd teste-tecnico
 ```
 
 ### 2. Suba os containers
@@ -73,5 +80,5 @@ projeto/
 │   │   └── assets/
 │   └── database/
 │       └── init.sql
-├── .env
+|
 └── README.md

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-tasks me-2"></i>
+                Gerenciador de Tarefas
+            </a>
+            <div class="navbar-nav ms-auto d-flex align-items-center">
+                <span class="navbar-text me-3" id="taskCounter">
+                    Total: <span class="badge bg-light text-dark">0</span>
+                </span>
+                <button id="toggleDarkMode" class="btn btn-outline-light btn-sm" aria-label="Alternar modo escuro">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="statusFilter" id="all" value="all" checked>
+                    <label class="btn btn-outline-primary" for="all">Todas</label>
+
+                    <input type="radio" class="btn-check" name="statusFilter" id="pendente" value="pendente">
+                    <label class="btn btn-outline-warning" for="pendente">Pendentes</label>
+
+                    <input type="radio" class="btn-check" name="statusFilter" id="em_andamento" value="em_andamento">
+                    <label class="btn btn-outline-info" for="em_andamento">Em Andamento</label>
+
+                    <input type="radio" class="btn-check" name="statusFilter" id="concluida" value="concluida">
+                    <label class="btn btn-outline-success" for="concluida">Concluídas</label>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#taskModal"
+                    aria-label="Criar nova tarefa">
+                    <i class="fas fa-plus me-1" aria-hidden="true"></i>
+                    Nova Tarefa
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingSpinner" class="text-center d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+        </div>
+
+        <!-- Lista de Tarefas -->
+        <div class="row" id="tasksContainer">
+            <!-- As tarefas serão inseridas aqui dinamicamente -->
+        </div>
+
+        <!-- Estado vazio -->
+        <div id="emptyState" class="text-center py-5 d-none" tabindex="0">
+            <i class="fas fa-clipboard-list fa-4x text-muted mb-3" aria-hidden="true"></i>
+            <h4 class="text-muted">Nenhuma tarefa encontrada</h4>
+            <p class="text-muted">Comece criando sua primeira tarefa!</p>
+        </div>
+    </div>
+
+    <!-- Modal para Criar/Editar Tarefa -->
+    <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="modalTitle" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nova Tarefa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+                <div class="modal-body">
+                    <form id="taskForm">
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Título *</label>
+                            <input type="text" class="form-control" id="taskTitle" required maxlength="255" aria-required="true" aria-describedby="taskTitleHelp">
+                            <div class="invalid-feedback">
+                                O título é obrigatório.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="taskDescription" rows="3" maxlength="1000" aria-describedby="taskDescriptionHelp"></textarea>
+                            <div id="taskDescriptionHelp" class="form-text">Máximo 1000 caracteres</div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskStatus" class="form-label">Status</label>
+                            <select class="form-select" id="taskStatus">
+                                <option value="pendente">Pendente</option>
+                                <option value="em_andamento">Em Andamento</option>
+                                <option value="concluida">Concluída</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveTaskBtn">
+                        <i class="fas fa-save me-1"></i>
+                        Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalTitle" aria-modal="true" role="dialog>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalTitle">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir esta tarefa?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="fas fa-trash me-1"></i>
+                        Excluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
+</body>
+
+</html>
